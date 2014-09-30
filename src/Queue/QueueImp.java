@@ -8,7 +8,7 @@ public class QueueImp implements QueueI {
     private int front=-1, rear=-1,size;
     private int arr[];
 
-    QueueImp(int size) {
+    public QueueImp(int size) {
 
         this.size=size;
         arr = new int[size];
