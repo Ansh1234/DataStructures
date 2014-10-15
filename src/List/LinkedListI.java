@@ -13,4 +13,10 @@ public interface LinkedListI {
     public void removeAfter(int element);
     public int size();
     public boolean isEmpty();
+    public void display();
+    public String toString();
+    public LinkedListNode returnHead();
+    public int getElement(LinkedListNode currNode);
+    public LinkedListNode getNext(LinkedListNode currNode);
+    public void reverse();
 }
