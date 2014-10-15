@@ -5,6 +5,7 @@ package List;
  */
 public class LinkedListNode {
 
-    int element;
-    LinkedListNode next;
+   public Integer element;
+   public LinkedListNode next;
+
 }
