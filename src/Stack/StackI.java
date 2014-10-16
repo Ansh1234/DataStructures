@@ -7,4 +7,5 @@ public interface StackI {
 
     public void push(int element);
     public void pop();
+    public void peep();
 }
