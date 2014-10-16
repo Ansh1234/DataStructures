@@ -46,4 +46,12 @@ public class QueueImp implements QueueI {
         return false;
     }
 
+    @Override
+    public void display() {
+
+        for(int i=front; i<=rear; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+
 }
