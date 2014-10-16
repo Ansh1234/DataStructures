@@ -52,59 +52,69 @@ public class BinarySearchTreeImp implements BinarySearchTreeI {
             System.out.println("Tree is empty");
             return;
         }
+        boolean found = false;
 
         BinaryTreeNode temp = root;
         while (temp != null) {
 
             if(element==temp.element) {
 
+                found = true;
 
-                System.out.println("passing value"+temp.element);
-                BinaryTreeNode parent = getParent(temp,root);
-                System.out.println("parent value is" +parent.element);
+                if((temp.left!=null) && (temp.right!=null)) {
+                    BinaryTreeNode currNode = nextReplacedElement(temp);
+                    BinaryTreeNode parent = returnParent(currNode);
 
-                if((temp.left!=null) && (temp.right!=null)){
-                    System.out.println("one");
-                   BinaryTreeNode max = temp.right;
-                        while(max.left!=null) {
-                            max =max.left;
-                        }
-                    temp.element=max.element;
-                    parent=getParent(max,root);
-                    if(parent.right == max)
-                        parent.right=null;
-                    else
-                        parent.left=null;
-
-
+                    if(currNode.element > parent.element) {
+                        parent.right = currNode.right;
+                    }
+                    else {
+                        parent.left =currNode.left;
+                    }
+                    temp.element = currNode.element;
                 }
 
                else if((temp.left==null) && (temp.right!=null)) {
-                    System.out.println("two");
-                    if(parent.right == temp)
-                        parent.right = temp.right;
-                    else
-                        parent.left=temp.right;
+                    if(temp != root) {
+                        BinaryTreeNode parent = returnParent(temp);
+                        if (parent.right == temp)
+                            parent.right = temp.right;
+                        else
+                            parent.left = temp.right;
+                    }
+                    else {
+                        root=root.right;
+                    }
                 }
 
                 else if( (temp.left!=null) && (temp.right==null)){
-                    System.out.println("three");
-                    if(parent.left == temp)
-                        parent.left = temp.left;
-                    else
-                        parent.right=temp.left;
-                    break;
+
+                    if(temp != root) {
+                        BinaryTreeNode parent = returnParent(temp);
+                        if (parent.left == temp)
+                            parent.left = temp.left;
+                        else
+                            parent.right = temp.left;
+                        break;
+                    }
+                    else {
+                        root=root.left;
+                    }
                 }
 
                 else {
 
-                    System.out.println("four");
-                    System.out.println(parent.element);
-                    System.out.println(temp.element);
-                    if(parent.left == temp)
-                        parent.left = null;
-                    else
-                        parent.right = null;
+                    if(temp != root) {
+                        BinaryTreeNode parent = returnParent(temp);
+                        if (parent.left == temp)
+                            parent.left = null;
+                        else
+                            parent.right = null;
+                    }
+                    else {
+                        root = null;
+                    }
+
                 }
 
                 break;
@@ -120,79 +130,29 @@ public class BinarySearchTreeImp implements BinarySearchTreeI {
 
         }
 
+        if(found==false) {
+            System.out.println("No Such Element to delete");
+        }
+
     }
 
-    public BinaryTreeNode getNParent(BinaryTreeNode node,BinaryTreeNode temp){
 
+    public BinaryTreeNode returnParent(BinaryTreeNode node) {
 
-        System.out.println(node.element);
-        System.out.println(temp.element);
-        while(temp != null) {
-
-            if((temp.left==node) || (temp.right==node)) {
-                System.out.println("true");
-                return temp;
-
+        BinaryTreeNode tempNode = root;
+        while(true) {
+            if((tempNode.left ==node) || (tempNode.right == node)) {
+                return tempNode;
+            }
+            else if(node.element < tempNode.element) {
+                tempNode = tempNode.left;
             }
             else {
-                if(node.element > temp.element) {
-                    getParent(node,temp.right);
-                }
-                else {
-                    getParent(node,temp.left);
-                }
+                tempNode = tempNode.right;
             }
 
         }
-        return root;
     }
-
-    public BinaryTreeNode getLParent(BinaryTreeNode searchNode,BinaryTreeNode currentNode){
-        if(currentNode == null || searchNode == root){
-            return null;
-        }else if((currentNode.left == searchNode) || (currentNode.right == searchNode)) {
-            return currentNode;
-        }else {
-            if(currentNode.element > searchNode.element) {
-                return getParent(searchNode, currentNode.left);
-            }
-            else {
-                return getParent(searchNode, currentNode.right);
-            }
-        }
-    }
-
-    class Pair {
-        Pair(Boolean found, BinaryTreeNode node){
-            this.found = found;
-            this.node = node;
-        }
-        Boolean found;
-        BinaryTreeNode node;
-    }
-
-    public BinaryTreeNode getParent(BinaryTreeNode searchNode,BinaryTreeNode currentNode){
-        return hasNode(searchNode, currentNode).node;
-    }
-
-    public Pair hasNode(BinaryTreeNode searchNode,BinaryTreeNode currentNode){
-        if(searchNode == currentNode){
-            return new Pair(true, null);
-        }else{
-            Pair pair;
-            if(currentNode.element > searchNode.element) {
-                pair = hasNode(searchNode, currentNode.left);
-            }else {
-                pair = hasNode(searchNode, currentNode.right);
-            }
-            if(pair.found && pair.node == null){
-                pair.node = currentNode;
-            }
-            return pair;
-        }
-    }
-
-
 
     @Override
     public boolean isEmpty() {
@@ -201,48 +161,104 @@ public class BinarySearchTreeImp implements BinarySearchTreeI {
     }
 
     @Override
-    public void preorder(BinaryTreeNode node) {
+    public void preOrder(BinaryTreeNode node) {
 
         if(node == null) return;
 
         System.out.println(node.element);
-        preorder(node.left);
-        preorder(node.right);
+        preOrder(node.left);
+        preOrder(node.right);
     }
 
     @Override
-    public void inorder(BinaryTreeNode node) {
+    public void inOrder(BinaryTreeNode node) {
 
         if(node == null) return;
 
-        inorder(node.left);
+        inOrder(node.left);
         System.out.println(node.element);
-        inorder(node.right);
+        inOrder(node.right);
     }
 
     @Override
-    public void postorder(BinaryTreeNode node) {
+    public void postOrder(BinaryTreeNode node) {
 
         if(node == null) return;
 
-        postorder(node.left);
-        postorder(node.right);
+        postOrder(node.left);
+        postOrder(node.right);
         System.out.println(node.element);
     }
-    public void display() {
-       // preorder(root);
-        //postorder(root);
-        inorder(root);
+
+    @Override
+    public BinaryTreeNode getRoot() {
+        return root;
     }
+
 
     public int size(BinaryTreeNode node) {
 
         if(node==null) return 0;
-       // size of a binary search tree is equal to the (size of leftsubtree) + (size of rightsubtree) +1
         return ( size(node.left) + size(node.right) + 1);
     }
 
     public int sizeOfTree() {
         return size(root);
     }
+
+    public Integer getSmallest() {
+
+        return  getSmallestElement(root).element;
+    }
+
+    public Integer getLargest() {
+
+        return getLargestElement(root).element;
+
+    }
+
+    private BinaryTreeNode getLargestElement(BinaryTreeNode root) {
+
+        if(root.right == null) {
+            return root;
+        }
+        else {
+            return getLargestElement(root.right);
+        }
+
+    }
+
+    private BinaryTreeNode getSmallestElement(BinaryTreeNode root) {
+
+        if(root.left != null) {
+            return  getSmallestElement(root.left);
+        }
+        else {
+            return root;
+        }
+    }
+
+    public BinaryTreeNode returnRoot() {
+        return root;
+    }
+
+    public void nextReplaced() {
+        System.out.println(nextReplacedElement(root.right.right).element);
+    }
+
+    public BinaryTreeNode nextReplacedElement(BinaryTreeNode node) {
+
+        if(node.left==null && node.right==null) {
+            return null;
+        }
+        else if(node.left != null) {
+
+            return  getLargestElement(node.left);
+        }
+        else {
+            return getSmallestElement(node.right);
+        }
+    }
+
+
 }
