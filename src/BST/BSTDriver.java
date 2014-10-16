@@ -8,17 +8,26 @@ public class BSTDriver {
     public static void main(String[] args) {
 
         BinarySearchTreeImp obj = new BinarySearchTreeImp();
-        int arr[] = {34,12,67,45,11,90,93};
+        int arr[] = {34,56,12,78,9,4,14,46};
 
         for(int i =0; i<arr.length;i++) {
             obj.insert(arr[i]);
         }
 
-       // obj.display();
-       // System.out.println(obj.sizeOfTree());
+        obj.remove(34);
+        obj.remove(14);
+        obj.remove(56);
+        obj.remove(12);
+        obj.remove(9);
+        obj.remove(4);
+        obj.remove(46);
+        obj.remove(78);
+        obj.remove(89);
 
-        obj.remove(67);
-        System.out.println("displaying");
-        obj.display();
+     
+
+
+
+
     }
 }
